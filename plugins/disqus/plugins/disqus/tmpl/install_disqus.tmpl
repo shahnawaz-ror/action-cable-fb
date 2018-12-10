@@ -1,0 +1,110 @@
+<mt:include name="dialog/header.tmpl" page_title="<__trans phrase="Install DISQUS">">
+
+<p><__trans phrase="Install DISQUS"></p>
+
+<mt:if name="error">
+    <mtapp:statusmsg
+        id="generic-error"
+        class="error">
+        <mt:var name="error" escape="html">
+    </mtapp:statusmsg>
+</mt:if>
+
+<mt:if name="installed">
+
+    <p><strong>DISQUS Comments has been successfully installed for this blog.</strong></p>
+        <div class="actions-bar">
+    <div class="actions-bar-inner pkg actions">
+        <a href="<mt:var name="return_url">" target="_top" class="primary-button"><__trans phrase="Close"></a>
+    </div>
+    </div>
+
+<mt:else>
+
+
+    <form method="post" action="<$mt:var name="script_url"$>">
+        <input type="hidden" name="__mode" value="install_disqus" />
+        <input type="hidden" name="blog_id" value="<$mt:var name="blog_id">" />
+        <input type="hidden" name="magic_token" value="<mt:var name="magic_token">" />
+        <input type="hidden" name="return_args" value="__mode=list_comment&blog_id=<$mt:var name="blog_id">" />
+
+    <mt:if name="forum_loop">
+        <input type="hidden" name="credentials" value="<$mt:var name="credentials">" />
+        <mtapp:setting
+            id="forum_list"
+            label="<__trans phrase="Choose site">"
+            label_class="top-label"
+            hint="<__trans phrase="Choose which site to install DISQUS on.">"
+            show_hint="0">
+                    <select name="short_name">
+            <mt:loop name="forum_loop"><option value="<mt:var name="short_name">"><mt:var name="name"></option></mt:loop>
+                    </select>
+        </mtapp:setting>
+
+        <mtapp:setting
+            id="replace"
+            label="<__trans phrase="Use DISQUS Comments on:">"
+            label_class="top-label"
+            hint="<__trans phrase="Control which blog posts will use the DISQUS Comment System.">"
+            show_hint="0">
+            <input type="radio" name="disqus_replace" id="disqus_replace_all" value="all">&nbsp;On all existing and future blog posts. <br />
+            <input type="radio" name="disqus_replace" id="disqus_replace_empty" value="empty">&nbsp;Only on blog posts with no comments (including future posts). <br />
+            <input type="radio" name="disqus_replace" id="disqus_replace_closed" value="closed">&nbsp;Only on blog posts with closed comments. <br />
+           <input type="radio" name="disqus_replace" id="disqus_replace_manual" value="manual" >&nbsp;(Advanced) Manually add a &lt;mt:DisqusComments&gt; tag to your templates. This option will not auto-insert DISQUS into your templates.
+        </mtapp:setting>
+
+        <mtapp:setting
+            id="use_api"
+            label="<__trans phrase="Use Server-side Rendering">"
+            label_class="top-label"
+            hint="<__trans phrase="Requires that your published pages support PHP rendering. This option uses the DISQUS API to render the comments (via PHP) into the HTML output at page-load time. This is good for search engine optimization (SEO).">"
+            show_hint="1">
+                   <input type="checkbox" name="disqus_use_api" id="disqus_use_api">
+        </mtapp:setting>
+
+    <mt:else>
+
+        <mtapp:setting
+            id="user"
+            label="<__trans phrase="DISQUS Username">"
+            label_class="top-label"
+            hint="<__trans phrase="Enter your DISQUS username.">"
+            show_hint="0">
+                <input type="text" name="disqus_username" />
+        </mtapp:setting>
+
+        <mtapp:setting
+            id="password"
+            label="<__trans phrase="DISQUS Password">"
+            label_class="top-label"
+            hint="<__trans phrase="Enter your DISQUS password.">"
+            show_hint="0">
+                <input type="password" name="disqus_password" />
+        </mtapp:setting>
+
+        <p>If you do not have an account, you can sign up for free at <a href="http://disqus.com">http://disqus.com</a>.</p>
+
+    </mt:if>
+
+        <div class="actions-bar">
+            <div class="actions-bar-inner pkg actions">
+                <button
+                    type="submit"
+                    accesskey="s"
+                    title="<__trans phrase="Continue (s)">"
+                    class="primary-button"
+                    ><__trans phrase="Continue"></button>
+                <button
+                    onclick="closeDialog(); return false"
+                    type="submit"
+                    accesskey="x"
+                    class="cancel"
+                    title="<__trans phrase="Cancel (x)">"
+                    ><__trans phrase="Cancel"></button>
+            </div>
+        </div>
+    </form>
+
+</mt:if>
+
+<mt:include name="dialog/footer.tmpl">

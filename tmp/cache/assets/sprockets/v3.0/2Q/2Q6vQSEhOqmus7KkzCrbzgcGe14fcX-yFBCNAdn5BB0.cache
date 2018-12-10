@@ -1,0 +1,10 @@
+I"ù(function() {
+  App.room = App.cable.subscriptions.create("WebNotificationsChannel", {
+    received: function(data) {
+      console.log('ssss');
+      return $('#notification-count').text(" students " + data['message']);
+    }
+  });
+
+}).call(this);
+:ET

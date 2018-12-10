@@ -1,0 +1,10 @@
+I"å(function() {
+  App.room = App.cable.subscriptions.create("WebNotificationsChannel", {
+    received: function(data) {
+      $('#messages').append(data['message']);
+      return alert(data['message']);
+    }
+  });
+
+}).call(this);
+:ET

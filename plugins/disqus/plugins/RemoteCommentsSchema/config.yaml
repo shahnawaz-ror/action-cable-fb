@@ -1,0 +1,14 @@
+name: Remote Comments Schema
+id: RemoteCommentsSchema
+key: RemoteCommentsSchema
+author_link: http://mt-hacks.com/
+author_name: Mark Carey
+description: Adds two columns to the Comments table for remote_id and remote_service, for use by developers.
+schema_version: 1
+version: 1.0
+plugin_link: http://mt-hacks.com/remotecommentsschema.html
+object_types:
+    comment:
+        remote_id: string(50)
+        remote_service: string(50)
+

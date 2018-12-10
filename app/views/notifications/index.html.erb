@@ -1,0 +1,89 @@
+<style type="text/css">
+
+</style>
+<p id="notice"><%= notice %></p>
+
+<h1 id="about">Notifications</h1>
+
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th colspan="5">Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @notifications.each do |notification| %>
+      <tr>
+        <td><%= notification.title %></td>
+        <td><%= notification.description %></td>
+        <td><%= link_to 'Show', notification%></td>
+        <td><%= link_to 'Edit', edit_notification_path(notification) %></td>
+        <td><%= link_to 'Destroy', notification, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><button type="button" id="<%= notification.id %>" class="btn btn-info status-class">status</button><div id="status-div<%= notification.id %>" class="status-div"</td>
+        <td><button type="button" id="<%= notification.id %>" class="change_status btn btn-primar">change status</button><div id="status-div<%= notification.id %>"></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br>
+<%= link_to 'check Data', check_data_path %>
+<%= link_to 'stop Data', stop_data_path %>
+<%= link_to 'New Notification', new_notification_path %>
+<script type="text/javascript">
+  // Event for handling 
+  document.querySelectorAll(".status-class").forEach(function(button){
+    button.addEventListener("click", function(event) {
+      var httpRequest = new XMLHttpRequest()
+      count = 0;
+      httpRequest.onreadystatechange = function (data) {
+      var id  = this.id
+      event.preventDefault();
+        count ++;
+        if (count <= 2) return;
+        result(this.responseText, this.responseURL.substr(this.responseURL.lastIndexOf('/') + 1))
+      }
+        httpRequest.open('GET', "/notifications/status/"+this.id)
+        httpRequest.send()
+    })
+  })
+  // Methods to show the status of notifications
+  function result(data, id){
+    document.querySelector("#status-div"+id).innerHTML = "";
+    document.querySelector("#status-div"+id).style.display = 'block'
+    node = document.createRange().createContextualFragment(JSON.parse(data).status)
+    document.querySelector("#status-div"+id).appendChild(node)
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    alert('Vanilla Js events called');
+    var tds = document.querySelectorAll('td')
+  })
+  // Vanilla create a div
+  var newDiv = document.createElement('div')
+  document.querySelector('td').setAttribute('name', 'My name')
+  newDiv.classList.add('my-class')
+  newDiv.classList.toggle('foo')
+  document.body.appendChild(document.createElement('p'))
+  var clonedElement = document.getElementById('about').cloneNode(true)
+  console.log(clonedElement);
+  var parent = document.getElementById('about').parentNode
+  console.log(parent)
+  document.querySelectorAll('.change_status').forEach(function(item) {
+    item.addEventListener("click", function(event) {
+      event.preventDefault()
+      var id = this.id
+      console.log("clicked")
+      Rails.ajax({
+        url: "/notifications/change_status/"+this.id,
+        type: "POST",
+        success: function(data) {
+          console.log(data)
+          document.querySelector("#status-div"+data['id']).style.display = 'none'
+          alert('Change status success fully')
+        }
+      })
+    })
+  })
+</script>
